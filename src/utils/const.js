@@ -1,5 +1,11 @@
 export default {
-    CODE_SUCCESS: 2000,
+    CODE_SUCCESS: 200,
+
+    CODE_BAD_REQUEST: 400,
+
+    CODE_BAD_CREDENTIALS: 401,
+
+    CODE_SERVICE_ERR: 500,
 
     CODE_NEED_LOGIN: 1004,
 
@@ -16,6 +22,8 @@ export default {
     STATUS_UPDATE_DATE_FROM_LEIKE_UPDATE_ING: '0',
 
     BASE_API: process.env.BASE_API,
+
+    OSS_DOM: process.env.OSS_DOM,
 
     PAGE_SET: {
         PAGE_LIST: 'list',

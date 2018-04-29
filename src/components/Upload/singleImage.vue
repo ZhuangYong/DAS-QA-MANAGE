@@ -71,7 +71,7 @@ export default {
         return {
 //            actionUrl: 'http://120.27.250.104:9010/system/upgrade/saveImg',
             headers: {
-                token: getToken()
+                token: getToken(),
             },
             imageUrl: "",
             chooseImg: [],
@@ -83,14 +83,14 @@ export default {
     },
     methods: {
         handleImageSuccess(res) {
-            const {msg, status, data} = res;
-            if (status === Const.CODE_SUCCESS) {
+            const {msg, code, data} = res;
+            if (code === Const.CODE_SUCCESS) {
                 const {imageNet} = data;
                 this.imageUrl = imageNet;
                 this.sucData = data;
                 this.success && this.success(data);
                 this.uploadSuccess && this.uploadSuccess(data, this);
-            } else if (status === Const.CODE_NEED_LOGIN) {
+            } else if (code === Const.CODE_NEED_LOGIN) {
                 location.href = "/login";
             } else {
 //                this.$refs.singleImage.clearFiles();
@@ -143,7 +143,11 @@ export default {
             this.chooseChange && this.chooseChange(file, fileList, this);
         },
         handelCleanImg() {
-            this. handleChange(null, []);
+            this.handleChange(null, []);
+        },
+        clearFiles() {
+            this.$refs.chooseBtn.$parent.$el.classList.remove("hidden");
+            this.$refs.singleImage.clearFiles();
         }
     }
 };

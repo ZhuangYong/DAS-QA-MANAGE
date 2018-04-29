@@ -35,7 +35,7 @@ module.exports = merge(baseWebpackConfig, {
         }),
         new FriendlyErrorsPlugin(),
         new OpenBrowserPlugin({
-            url: 'http://wx.j-make.cn'
+            url: 'http://test.wx.tnyxg.cn:88'
         })
     ]
 });

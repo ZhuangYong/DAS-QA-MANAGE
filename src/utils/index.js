@@ -354,54 +354,6 @@ function hasPermissionInUrl(urls, key) {
     // return has;
 }
 
-export function getUserType() {
-    return [{
-        value: Const.USER_TYPE_JMAKE,
-        label: '金麦客'
-    }, {
-        value: Const.USER_TYPE_SALES,
-        label: '销售方'
-    }, {
-        value: Const.USER_TYPE_MANUFACTURER,
-        label: '渠道方'
-    }];
-}
-
-export function getUpgradeType() { //升级类型
-    return [{
-        value: 1,
-        label: 'app升级'
-    }, {
-        value: 2,
-        label: 'rom升级'
-    }, {
-        value: 3,
-        label: '音效升级'
-    }, {
-        value: 4,
-        label: 'HDMI升级'
-    }];
-}
-
-export function getPushType() { //推送类型
-    return [{
-        value: 1,
-        label: '最新配置'
-    }, {
-        value: 2,
-        label: '系统升级检测'
-    }, {
-        value: 3,
-        label: '应用升级检测'
-    }, {
-        value: 4,
-        label: '系统消息提醒'
-    }, {
-        value: 5,
-        label: '赠送免费VIP'
-    }];
-}
-
 export function getRandom(len, radix) {//获取随机数
     const CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
     var chars = CHARS, uuid = [], i;

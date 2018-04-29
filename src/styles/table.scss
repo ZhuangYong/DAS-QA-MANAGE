@@ -51,4 +51,31 @@
 .el-form-item__error{
     position: relative;
 }
+.content-dialog{
+    .el-dialog{
+        width: 417px;
+        margin-top: 22px!important;
+        .el-dialog__body{
+            padding-bottom: 4px!important;
+            padding-top: 4px!important;
+        }
+        .quill-editor,.ql-container.ql-snow{
+            min-height: 400px;
+        }
+    }
+}
+.ql-snow .ql-picker{
+    height: auto!important;
+}
 
+.edit-button{
+    padding: 6px;
+    cursor: pointer;
+    &:hover{
+        background-color: rgba(35, 250, 250, 0.3);
+        border-radius: 50%;
+    }
+}
+.is-check{
+    border-color: #055705!important;
+}

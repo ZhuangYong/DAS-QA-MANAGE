@@ -8,14 +8,15 @@ import {rememberPath} from "./index";
 
 // 创建axios实例
 const service = axios.create({
+    // withCredentials: true,
     baseURL: process.env.BASE_API, // api的base_url
-    timeout: 5000                  // 请求超时时间
+    timeout: 25000                  // 请求超时时间
 });
 
 // request拦截器
 service.interceptors.request.use(config => {
     // Do something before request is sent
-    if (store.getters.user.token) {
+    if (store.getters.auth.token) {
         config.headers['token'] = getToken();
         // config.headers['Access-Control-Allow-Origin'] = true
     }
@@ -39,16 +40,9 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(
     response => {
         const res = response.data;
-        const {msg, status, data} = res;
-        if (status === Const.CODE_NEED_LOGIN) {
-            rememberPath();
-            if (location.pathname.indexOf("/login") < 0) location.href = "/login";
-        } else if (status !== Const.CODE_SUCCESS) {
-            Message({
-                message: msg || "操作失败",
-                type: 'error',
-                duration: Const.FETCH_ERROR_COUNT * 1000
-            });
+        const {msg, code: status, data} = res;
+        if (status !== Const.CODE_SUCCESS) {
+            handelErrCode(status, msg);
             return Promise.reject(msg);
             // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
             // if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
@@ -73,14 +67,42 @@ service.interceptors.response.use(
      */
 
     error => {
+        const {response = {}} = error || {};
+        const {status, data} = response;
         console.log('err' + error);// for debug
-        Message({
-            message: error.message,
-            type: 'error',
-            duration: 5 * 1000
-        });
+        if (status === 302) {
+            rememberPath();
+            location.href = data.data;
+        }
+        handelErrCode(status, error.message);
         return Promise.reject(error);
-    }
+    },
+
 );
+
+function handelErrCode(code, msg) {
+    let errMsg = "";
+    switch (code) {
+        case Const.CODE_BAD_REQUEST:
+            errMsg = "参数错误";
+            break;
+        case Const.CODE_NEED_LOGIN:
+            errMsg = "请登录";
+            break;
+        case Const.CODE_BAD_CREDENTIALS:
+            errMsg = "用户名或密码错误";
+            break;
+        case Const.CODE_SERVICE_ERR:
+            errMsg = "";
+            break;
+        default:
+            break;
+    }
+    Message({
+        message: (errMsg || "操作失败") + `${msg ? `(${msg})` : ""}`,
+        type: 'error',
+        duration: Const.FETCH_ERROR_COUNT * 1000
+    });
+}
 
 export default service;

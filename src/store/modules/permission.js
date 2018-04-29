@@ -53,7 +53,7 @@ const permission = {
             return new Promise(resolve => {
                 const {urls, time} = data;
                 let accessedRouters;
-                if (time === parseTime(new Date(), '{y}-{m}-{d}')) {
+                if (time && time.split(" ")[0] === parseTime(new Date(), '{y}-{m}-{d}')) {
                     accessedRouters = asyncRouterMap;
                 } else {
                     accessedRouters = filterAsyncRouter(asyncRouterMap, urls);

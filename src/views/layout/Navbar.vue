@@ -6,21 +6,15 @@
 
         <!--<span @click="logout" style="float: right; cursor: pointer; margin: 0 1rem;">注销</span>-->
         <el-dropdown class="avatar-container" trigger="click">
-            <div class="avatar-wrapper">
-                <img class="user-avatar" :src="user.avatar ? user.avatar+'?imageView2/1/w/80/h/80' : defaultAvatar">
-                <span class="user-name">{{user.name}}</span>
-                <i class="el-icon-caret-bottom"></i>
+            <div class="avatar-wrapper" style="cursor: auto">
+                <img class="user-avatar" :src="auth.avatar ? auth.avatar+'?imageView2/1/w/80/h/80' : defaultAvatar">
+                <span class="user-name">{{auth.name}}</span>
+                <span @click="logout" style="display: block;margin-left: 16px;color: #c30808;font-weight: bold;cursor: pointer;">注销</span>
             </div>
             <el-dropdown-menu class="user-dropdown" slot="dropdown">
-
-                <router-link class='inlineBlock' to="/register">
-                    <el-dropdown-item>修改密码</el-dropdown-item>
-                </router-link>
-
-                <el-dropdown-item divided><span @click="logout" style="display:block;">注销</span></el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
-        <screenfull class='screenfull'></screenfull>
+        <!--<screenfull class='screenfull'></screenfull>-->
     </el-menu>
 </template>
 
@@ -73,7 +67,7 @@
         computed: {
             ...mapGetters([
                 'sidebar',
-                'user'
+                'auth'
             ])
         },
         methods: {

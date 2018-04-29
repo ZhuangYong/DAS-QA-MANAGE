@@ -3,6 +3,7 @@
  */
 import {Vue, Component, Watch} from "vue-property-decorator";
 import imageViewer from "vue-image-viewer";
+import "vue-image-viewer/lib/vue-image-viewer.css";
 import VueSimpleAudio from "vue-simple-audio/src/index";
 import Const from "../../utils/const";
 import _ from "lodash";
@@ -238,7 +239,8 @@ export default class CommonTable extends Vue {
                                     } : (viewRuleItem.formatter ? (row) => {
                                         return viewRuleItem.formatter(row, h);
                                     } : (viewRuleItem.imgColumn ? (row) => {
-                                        const _img = typeof viewRuleItem.imgColumn === "function" ? viewRuleItem.imgColumn(row) : row[viewRuleItem.imgColumn] || (row.tails && row.tails[viewRuleItem.imgColumn]);
+                                        let _img = typeof viewRuleItem.imgColumn === "function" ? viewRuleItem.imgColumn(row) : row[viewRuleItem.imgColumn] || (row.tails && row.tails[viewRuleItem.imgColumn]);
+                                        if (viewRuleItem.ossDomain) _img = viewRuleItem.ossDomain + _img;
                                         this.tableImages[_img] = true;
                                         if (_img) return (<img src={_img} style="height: 30px; margin-top: 6px; cursor: pointer;" onClick={e => {
                                             e.preventDefault();
@@ -334,7 +336,8 @@ export default class CommonTable extends Vue {
             const {formatter, imgColumn, auditionColumn, columnKey} = ruleItem;
             if (typeof formatter === "function") return formatter(row, h) || " ";
             if (imgColumn) {
-                const _img = typeof imgColumn === "function" ? imgColumn(row) : row[imgColumn] || (row.tails && row.tails[imgColumn]);
+                let _img = typeof imgColumn === "function" ? imgColumn(row) : row[imgColumn] || (row.tails && row.tails[imgColumn]);
+                if (ruleItem.ossDomain) _img = ruleItem.ossDomain + _img;
                 let showImgs;
                 if (_img && _img.map) {
                     showImgs = _img.map(subImg => {
@@ -355,10 +358,10 @@ export default class CommonTable extends Vue {
             <form class="el-form el-form--label-left el-form--inline" style="max-width: 1000px;" id={`detail-${Math.random()}`}>
                 {
                     (row && this.viewRule) && this.viewRule.map((viewRuleItem) => (
-                        !viewRuleItem.buttons ? <div class= "el-form-item" style="margin-right: 0; margin-bottom: 0; width: 50%;">
+                        !viewRuleItem.buttons ? <div class= "el-form-item" style="margin-right: 0; margin-bottom: 0; width: 50%; display: flex; align-items: center; float: left;">
                             <label class="el-form-item__label" style="min-width: 110px; color: #99a9bf;">{viewRuleItem.label}</label>
-                            <div class="el-form-item__content">
-                                    <span>
+                            <div class="el-form-item__content" style="line-height: 18px">
+                                    <span style="word-break: break-word">
                                         {
                                             detailContent(viewRuleItem)
                                         }
@@ -394,6 +397,9 @@ export default class CommonTable extends Vue {
             }
         });
         param = Object.assign({}, this.orderBy, param, _searchColumnData);
+        if (this.data.data.length > 0) {
+            param["seek"] = this.data.data[this.data.data.length - 1];
+        }
         this.searched = !!Object.keys(_searchColumnData).length;
         this.$store.dispatch(_tableAction, param).then((res) => {
             const {currentPage} = res;
@@ -419,7 +425,7 @@ export default class CommonTable extends Vue {
                     this.orderBy = {};
                 }
                 let actionOrderBy = {};
-                actionOrderBy[this.tableAction] = {sort: prop, direction: order.replace("ending", "")};
+                if (order) actionOrderBy[this.tableAction] = {sort: prop, direction: order.replace("ending", "")};
                 this.handelSortChange(actionOrderBy);
                 this.tableAction && this.refreshData({
                     currentPage: this.currentPage

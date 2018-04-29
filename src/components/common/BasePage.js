@@ -13,7 +13,6 @@ import Component from "vue-class-component";
 import Vue from 'vue';
 import CommonTable from "../../components/Table/CommonTable";
 import {Watch} from "vue-property-decorator/lib/vue-property-decorator";
-import {updateActorCategoryDB, updateRankInfo, updateTbActorOnMedia} from "../../api/category";
 import ConfirmDialog from '../../components/confirm';
 import _ from "lodash";
 import {bindData, unBindData} from "../../utils";
@@ -372,35 +371,6 @@ export default class BasePage extends Vue {
         this.submitLoading = true;
     }
 
-
-    /**
-     * 从雷客更新数据
-     * @param param
-     * @param extra
-     * @param isUpdateActorCategoryDB
-     * @param isUpdateTbActorOnMedia
-     */
-    updateFromLeiKe(param, extra, isUpdateActorCategoryDB, isUpdateTbActorOnMedia) {
-        this.submitLoading = true;
-        const suc = () => {
-            this.$refs.commonTable.refreshData({
-                currentPage: this.defaultTableCurrentPage
-            });
-            this.submitLoading = false;
-        };
-        const fail = err => {
-            this.failMsg(err);
-            this.submitLoading = false;
-        };
-        if (isUpdateTbActorOnMedia) {
-            updateTbActorOnMedia().then(suc).catch(fail);
-        } else if (isUpdateActorCategoryDB) {
-            updateActorCategoryDB().then(suc).catch(fail);
-        } else {
-            updateRankInfo(param, extra).then(suc).catch(fail);
-        }
-
-    }
 
     /**
      * 重置表单数据
